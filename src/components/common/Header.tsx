@@ -1,11 +1,16 @@
+// src/components/common/Header.tsx
 import styled from "styled-components";
-import { Link } from "react-router"; // 반드시 react-router를 사용합니다!
+import { Link } from "react-router";
+// 1. 필요한 아이콘들을 불러옵니다.
+import { FaSignInAlt, FaUserPlus, FaBook } from "react-icons/fa";
 
 function Header() {
   return (
     <HeaderStyle>
       <h1 className="logo">
-        <Link to="/">BOOKSTORE</Link>
+        <Link to="/">
+          <FaBook className="icon" /> BOOKSTORE
+        </Link>
       </h1>
       <nav className="category">
         <ul>
@@ -24,8 +29,13 @@ function Header() {
         </ul>
       </nav>
       <div className="auth">
-        <Link to="/login">로그인</Link>
-        <Link to="/signup">회원가입</Link>
+        {/* 2. 링크 텍스트 옆에 아이콘을 배치합니다. */}
+        <Link to="/login">
+          <FaSignInAlt /> 로그인
+        </Link>
+        <Link to="/signup">
+          <FaUserPlus /> 회원가입
+        </Link>
       </div>
     </HeaderStyle>
   );
@@ -34,9 +44,9 @@ function Header() {
 const HeaderStyle = styled.header`
   width: 100%;
   max-width: 1020px;
-  margin: 0 auto; /* 중앙 정렬 */
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* 양 끝과 가운데로 균일하게 배치 */
+  justify-content: space-between;
   align-items: center;
   padding: 20px 0;
   border-bottom: 1px solid ${({ theme }) => theme.color?.border || "#ccc"};
@@ -45,6 +55,9 @@ const HeaderStyle = styled.header`
     font-size: 1.5rem;
     font-weight: bold;
     a {
+      display: flex;
+      align-items: center;
+      gap: 8px; /* 로고 아이콘과 글자 사이 간격 */
       text-decoration: none;
       color: ${({ theme }) => theme.color?.primary || "black"};
     }
@@ -55,7 +68,6 @@ const HeaderStyle = styled.header`
     gap: 32px;
     list-style: none;
     padding: 0;
-
     a {
       text-decoration: none;
       color: ${({ theme }) => theme.color?.text || "black"};
@@ -66,6 +78,9 @@ const HeaderStyle = styled.header`
     display: flex;
     gap: 16px;
     a {
+      display: flex;
+      align-items: center;
+      gap: 4px; /* 아이콘과 글자 사이 간격 */
       text-decoration: none;
       color: ${({ theme }) => theme.color?.text || "black"};
     }
