@@ -4,6 +4,9 @@ import { BookStoreThemeProvider } from "./context/themeContext";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import ResetPassword from "./pages/ResetPassword";
+import Books from "./pages/Books";
 
 function App() {
   return (
@@ -15,6 +18,9 @@ function App() {
           <Route path="/" element={<Home />} />
           {/* /signup 주소일 때는 Signup 컴포넌트를 보여줍니다. */}
           <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/reset" element={<ResetPassword />} />
         </Routes>
       </Layout>
     </BookStoreThemeProvider>
