@@ -7,6 +7,7 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Books from "./pages/Books";
+import BookDetail from "./pages/BookDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/books" element={<Books />} />
           <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/book/:id" element={<BookDetail />} />
         </Routes>
       </Layout>
     </BookStoreThemeProvider>
