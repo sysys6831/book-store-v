@@ -1,138 +1,119 @@
 // src/pages/Signup.tsx
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router"; // Link 추가
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Title from "../components/common/Title";
 import InputText from "../components/common/InputText";
 import Button from "../components/common/Button";
-import { signup } from "../api/auth.api";
 
-export interface SignupProps {
+// 1. 회원가입에 필요한 데이터 규격을 정합니다.
+interface SignupProps {
   email: string;
   password: string;
 }
 
 function Signup() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupProps>();
 
-  const navigate = useNavigate();
-
+  // 2. 가입하기 버튼을 눌렀을 때 실행될 함수입니다.
   const onSubmit = (data: SignupProps) => {
-    signup(data).then(() => {
-      window.alert("회원가입이 완료되었습니다.");
-      navigate("/login");
-    });
+    // 실제로는 여기서 서버의 회원가입 API를 호출합니다.
+    console.log("회원가입 요청 데이터:", data);
+
+    // 3. 성공했다고 가정하고 알림을 띄운 뒤 로그인 화면으로 보냅니다.
+    window.alert("회원가입이 완료되었습니다!");
+    navigate("/login");
   };
 
   return (
     <SignupStyle>
-      {/* 1. Title을 레이아웃 박스 안으로 집어넣어 정렬을 맞춥니다. */}
-      <div className="signup-title">
-        <Title size="large">회원가입</Title>
-      </div>
+      <Title size="large">회원가입</Title>
 
-      {/* 2. 폼 영역을 하얀색 박스로 감싸줍니다. */}
-      <div className="signup-form">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <fieldset>
+      {/* 4. form 요소로 감싸고 onSubmit 이벤트를 연결해 줍니다. */}
+      <form className="signup-form" onSubmit={handleSubmit(onSubmit)}>
+        <fieldset>
+          <div className="input-group">
+            <label>이메일</label>
             <InputText
-              placeholder="이메일"
               type="email"
+              placeholder="이메일을 입력하세요"
               {...register("email", { required: true })}
             />
             {errors.email && (
-              <p className="error-text">이메일을 입력해주세요.</p>
+              <span className="error-text">이메일을 입력해 주세요.</span>
             )}
-          </fieldset>
+          </div>
 
-          <fieldset>
+          <div className="input-group">
+            <label>비밀번호</label>
             <InputText
-              placeholder="비밀번호"
               type="password"
+              placeholder="비밀번호를 입력하세요"
               {...register("password", { required: true })}
             />
             {errors.password && (
-              <p className="error-text">비밀번호를 입력해주세요.</p>
+              <span className="error-text">비밀번호를 입력해 주세요.</span>
             )}
-          </fieldset>
-
-          <fieldset>
-            <Button type="submit" size="medium" scheme="primary">
-              회원가입
-            </Button>
-          </fieldset>
-
-          {/* 3. 비밀번호 초기화 링크를 추가합니다. */}
-          <div className="info">
-            <Link to="/reset">비밀번호 초기화</Link>
           </div>
-        </form>
-      </div>
+
+          {/* type="submit" 버튼을 누르면 form 전체가 전송됩니다. */}
+          <div className="submit-btn">
+            <Button size="large" scheme="primary" type="submit">
+              가입하기
+            </Button>
+          </div>
+        </fieldset>
+      </form>
     </SignupStyle>
   );
 }
 
 const SignupStyle = styled.div`
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 50px 0;
   display: flex;
   flex-direction: column;
-  align-items: center; /* 전체 요소를 화면 가운데로 정렬 */
-  padding: 50px 0;
+  align-items: center;
 
-  /* 제목 영역 스타일 */
-  .signup-title {
-    width: 100%;
-    max-width: 400px;
-    text-align: left; /* 박스 안에서는 왼쪽 정렬 */
-    margin-bottom: 20px;
-  }
-
-  /* 폼 영역(하얀 박스) 스타일 */
   .signup-form {
     width: 100%;
-    max-width: 400px;
-    padding: 40px;
-    background-color: white;
-    border: 1px solid ${({ theme }) => theme.color?.border || "#ccc"};
-    border-radius: ${({ theme }) => theme.borderRadius?.default || "4px"};
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 24px;
 
     fieldset {
       border: 0;
       padding: 0;
-      margin: 0 0 20px 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-group {
       display: flex;
       flex-direction: column;
       gap: 8px;
-    }
 
-    .error-text {
-      color: red;
-      font-size: 0.875rem;
-      margin: 0;
-      padding-left: 10px;
-    }
+      label {
+        font-weight: bold;
+        color: ${({ theme }) => theme.color?.text || "black"};
+      }
 
-    input {
-      padding: 12px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-    }
-
-    /* 비밀번호 초기화 링크 스타일 */
-    .info {
-      text-align: center;
-      margin-top: 20px;
-      a {
+      .error-text {
+        color: red;
         font-size: 0.875rem;
-        color: gray;
-        text-decoration: underline; /* 클릭할 수 있음을 보여줌 */
+      }
+    }
+
+    .submit-btn {
+      margin-top: 16px;
+      button {
+        width: 100%;
       }
     }
   }

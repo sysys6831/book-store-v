@@ -1,5 +1,7 @@
 // src/components/book/AddToCart.tsx
 import { useState } from "react";
+// 1. 페이지 이동을 위해 useNavigate를 반드시 react-router에서 불러옵니다.
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import { type BookDetail } from "../../models/book.model";
 import Button from "../common/Button";
@@ -11,30 +13,34 @@ interface Props {
 
 function AddToCart({ book }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
-  const [cartAdded, setCartAdded] = useState(false);
+  const navigate = useNavigate(); // 2. 네비게이트 함수를 활성화합니다.
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuantity(Number(e.target.value));
   };
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
-
   const handleDecrease = () => {
-    if (quantity === 1) return; // 1개 밑으로는 내려가지 않게 막습니다!
+    if (quantity === 1) return;
     setQuantity((prev) => prev - 1);
   };
 
   const addToCart = () => {
-    console.log("장바구니 추가:", { book_id: book.id, quantity });
-    setCartAdded(true);
-    // 3초 뒤에 알림을 자동으로 숨깁니다.
-    setTimeout(() => {
-      setCartAdded(false);
-    }, 3000);
+    // 실제로는 여기서 장바구니에 데이터를 넣는 API를 호출합니다.
+    console.log("장바구니 추가 데이터:", { book_id: book.id, quantity });
+
+    // 3. 사용자에게 확인을 받고 장바구니 페이지로 넘겨줍니다.
+    const isGoCart = window.confirm(
+      "장바구니에 추가되었습니다.\n장바구니로 이동하시겠습니까?",
+    );
+
+    if (isGoCart) {
+      navigate("/cart");
+    }
   };
 
   return (
-    <AddToCartStyle $added={cartAdded}>
+    <AddToCartStyle>
       <div className="quantity">
         <InputText type="number" value={quantity} onChange={handleChange} />
         <Button size="medium" scheme="normal" onClick={handleIncrease}>
@@ -47,14 +53,11 @@ function AddToCart({ book }: Props) {
       <Button size="medium" scheme="primary" onClick={addToCart}>
         장바구니 담기
       </Button>
-      {cartAdded && (
-        <div className="added-alert">장바구니에 추가되었습니다.</div>
-      )}
     </AddToCartStyle>
   );
 }
 
-const AddToCartStyle = styled.div<{ $added: boolean }>`
+const AddToCartStyle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -68,14 +71,6 @@ const AddToCartStyle = styled.div<{ $added: boolean }>`
       width: 60px;
       text-align: center;
     }
-  }
-
-  .added-alert {
-    position: absolute;
-    bottom: -24px;
-    right: 0;
-    color: green;
-    font-size: 0.875rem;
   }
 `;
 
