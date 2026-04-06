@@ -1,16 +1,15 @@
 // src/pages/Cart.tsx
 import { useState, useMemo, useEffect } from "react";
-// 규정에 따라 react-router에서 임포트합니다.
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router"; // react-router 규칙 준수
 import styled from "styled-components";
-
-import Title from "../components/common/Title";
-import CartItem from "../components/cart/cartItem";
-import CartSummary from "../components/cart/CartSummary";
-import { type Cart as ICart } from "../models/cart.model";
 import { FaShoppingCart } from "react-icons/fa";
 
-// 화면을 테스트하기 위한 임시 가짜 데이터입니다.
+// ✨ 상대 경로(../)를 모두 절대 경로(@/)로 통일했습니다.
+import Title from "@/components/common/Title";
+import CartItem from "@/components/cart/CartItem";
+import CartSummary from "@/components/cart/CartSummary";
+import { type Cart as ICart } from "@/models/cart.model";
+
 const mockCarts: ICart[] = [
   {
     id: 1,
@@ -44,19 +43,14 @@ function Cart() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 실제로는 API 통신으로 데이터를 불러옵니다.
     setCarts(mockCarts);
-    // 처음에 모든 아이템을 체크된 상태로 만듭니다.
     setCheckedItems(mockCarts.map((cart) => cart.id));
   }, []);
 
-  // 장바구니가 비었는지 확인
   const isEmpty = carts.length === 0;
 
-  // 체크박스 클릭 핸들러
   const handleCheckItem = (id: number) => {
     setCheckedItems((prev) => {
-      // 이미 체크되어 있다면 배열에서 빼고, 없다면 배열에 추가합니다.
       if (prev.includes(id)) {
         return prev.filter((item) => item !== id);
       }
@@ -64,42 +58,34 @@ function Cart() {
     });
   };
 
-  // 개별 아이템 삭제 핸들러
   const handleDeleteItem = (id: number) => {
-    // 경고창으로 한 번 더 물어봅니다.
     if (window.confirm("정말 삭제하시겠습니까?")) {
       setCarts(carts.filter((cart) => cart.id !== id));
       setCheckedItems(checkedItems.filter((item) => item !== id));
     }
   };
 
-  // 총수량, 총금액 계산 로직 (useMemo로 최적화)
   const totalQuantity = useMemo(() => {
     return carts.reduce((total, cart) => {
-      if (checkedItems.includes(cart.id)) {
-        return total + cart.quantity;
-      }
+      if (checkedItems.includes(cart.id)) return total + cart.quantity;
       return total;
     }, 0);
   }, [carts, checkedItems]);
 
   const totalPrice = useMemo(() => {
     return carts.reduce((total, cart) => {
-      if (checkedItems.includes(cart.id)) {
+      if (checkedItems.includes(cart.id))
         return total + cart.price * cart.quantity;
-      }
       return total;
     }, 0);
   }, [carts, checkedItems]);
 
-  // 주문하기 버튼 핸들러
   const handleOrder = () => {
     if (checkedItems.length === 0) {
       window.alert("주문할 상품을 선택해 주세요.");
       return;
     }
 
-    // 선택된 아이템만 모아서 주문서 데이터로 만듭니다.
     const orderData = {
       items: checkedItems,
       totalPrice,
@@ -108,7 +94,6 @@ function Cart() {
         carts.find((cart) => cart.id === checkedItems[0])?.title || "",
     };
 
-    // 사진 속 로직과 동일하게 주문 페이지로 데이터를 들고 이동합니다.
     navigate("/order", { state: orderData });
   };
 
@@ -117,13 +102,11 @@ function Cart() {
       <Title size="large">장바구니</Title>
 
       {isEmpty ? (
-        // 1. 장바구니가 비어있을 때 화면
         <div className="empty">
           <FaShoppingCart className="icon" />
           <p>장바구니가 비었습니다</p>
         </div>
       ) : (
-        // 2. 장바구니에 아이템이 있을 때 화면
         <div className="content">
           <div className="cart-list">
             {carts.map((cart) => (
@@ -167,7 +150,6 @@ const CartStyle = styled.div`
       color: #ccc;
       margin-bottom: 16px;
     }
-
     p {
       font-size: 1.25rem;
       font-weight: bold;
@@ -179,15 +161,12 @@ const CartStyle = styled.div`
     gap: 24px;
     margin-top: 24px;
 
-    /* 왼쪽 리스트 영역이 더 넓게 차지하도록 설정합니다. */
     .cart-list {
       flex: 2;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
-
-    /* 오른쪽 요약 박스 영역 */
     .cart-summary {
       flex: 1;
     }
