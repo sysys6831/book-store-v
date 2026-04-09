@@ -3,8 +3,6 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 import { useBooks } from "@/hooks/useBooks";
-
-// ✨ BookItem 컴포넌트와 Book 모델을 불러옵니다. (경로는 프로젝트에 맞게 확인해 주세요)
 import BookItem from "@/components/books/BookItem";
 import { type Book } from "@/models/book.model";
 
@@ -23,7 +21,6 @@ function Books() {
       <div className="book-grid">
         {data?.pages.map((page) =>
           page.items.map((book: Book) => (
-            // ✨ 여기에 view="grid" 속성을 필수로 추가해 줍니다!
             <BookItem key={book.id} book={book} view="grid" />
           )),
         )}
@@ -40,10 +37,25 @@ const BooksStyle = styled.div`
   margin: 0 auto;
   padding: 50px 0;
 
+  /* ✨ 모바일 여백 추가 */
+  @media screen and (max-width: 1024px) {
+    padding: 50px 20px;
+  }
+
   .book-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
+
+    /* ✨ 태블릿: 2열 배치 */
+    @media screen and (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* ✨ 모바일: 1열 배치 */
+    @media screen and (max-width: 480px) {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 
   .loading-sentinel {
@@ -56,5 +68,4 @@ const BooksStyle = styled.div`
   }
 `;
 
-// ✨ 잊지 말고 꼭 내보내기(export)를 해줍니다.
 export default Books;

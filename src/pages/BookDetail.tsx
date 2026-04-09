@@ -148,10 +148,17 @@ function BookDetail() {
   );
 }
 
+// src/pages/BookDetail.tsx 내부의 하단 스타일 코드 교체
+
 const BookDetailStyle = styled.div`
   padding: 50px 0;
   max-width: 1020px;
   margin: 0 auto;
+
+  /* ✨ 모바일 여백 추가 */
+  @media screen and (max-width: 1024px) {
+    padding: 30px 20px;
+  }
 
   .header {
     display: flex;
@@ -160,9 +167,16 @@ const BookDetailStyle = styled.div`
     padding: 0 0 24px 0;
     margin-bottom: 24px;
 
+    /* ✨ 핵심: 태블릿/모바일에서는 가로 배치를 세로 배치로 변경 */
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+    }
+
     .img-wrapper {
       flex: 1;
       max-width: 450px;
+      width: 100%; /* 모바일에서 꽉 차게 */
       position: relative;
       cursor: pointer;
 
@@ -171,6 +185,12 @@ const BookDetailStyle = styled.div`
         height: 480px;
         object-fit: cover;
         border-radius: 8px;
+
+        /* 모바일에서는 사진 높이를 기기 비율에 맞게 조절 */
+        @media screen and (max-width: 768px) {
+          height: auto;
+          aspect-ratio: 3 / 4;
+        }
       }
 
       .img-hint {
@@ -190,6 +210,7 @@ const BookDetailStyle = styled.div`
       display: flex;
       flex-direction: column;
       gap: 12px;
+      width: 100%; /* 세로 배치 시 텍스트 영역도 꽉 차게 */
 
       .title-area {
         display: flex;

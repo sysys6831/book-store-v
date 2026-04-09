@@ -96,7 +96,6 @@ function Header() {
 }
 
 const HeaderStyle = styled.header`
-  /* 학생분이 설정하셨던 중앙 정렬 레이아웃을 그대로 가져왔습니다. */
   width: 100%;
   max-width: 1020px;
   margin: 0 auto;
@@ -106,6 +105,17 @@ const HeaderStyle = styled.header`
   padding: 20px 0;
   border-bottom: 1px solid ${({ theme }) => theme.color?.border || "#ccc"};
 
+  /* ✨ 모바일 대응 레이아웃 */
+  @media screen and (max-width: 1024px) {
+    padding: 20px;
+  }
+
+  /* ✨ 좁은 화면에서는 세로로 차곡차곡 쌓이게 만듭니다. */
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+  }
+
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
@@ -114,8 +124,7 @@ const HeaderStyle = styled.header`
       align-items: center;
       gap: 8px;
       text-decoration: none;
-      color: ${({ theme }) =>
-        theme.color?.primary || "#ff5800"}; /* 브랜드 컬러로 변경 가능 */
+      color: ${({ theme }) => theme.color?.primary || "#ff5800"};
     }
   }
 
@@ -125,6 +134,12 @@ const HeaderStyle = styled.header`
     list-style: none;
     padding: 0;
     margin: 0;
+
+    /* 모바일에서는 카테고리 사이 간격을 좁힙니다. */
+    @media screen and (max-width: 480px) {
+      gap: 16px;
+    }
+
     a {
       text-decoration: none;
       color: ${({ theme }) => theme.color?.text || "black"};
@@ -136,6 +151,7 @@ const HeaderStyle = styled.header`
   }
 
   .user-menu {
+    /* 모바일에서 프로필 아이콘이 우측 상단 등에 고정되길 원한다면 position: absolute 적용도 가능합니다. */
     .profile-btn {
       background: none;
       border: none;
@@ -150,22 +166,21 @@ const HeaderStyle = styled.header`
       }
     }
 
+    /* 드롭다운 메뉴 스타일 (기존과 동일) */
     .profile-dropdown {
       list-style: none;
       margin: 0;
       padding: 0;
-
       li {
         border-bottom: 1px solid #f5f5f5;
         &:last-child {
           border-bottom: none;
         }
-
         a,
         button {
           display: flex;
           align-items: center;
-          gap: 12px; /* 아이콘과 글자 사이 간격 */
+          gap: 12px;
           padding: 12px 20px;
           width: 100%;
           text-align: left;
@@ -176,7 +191,6 @@ const HeaderStyle = styled.header`
           font-size: 0.9rem;
           cursor: pointer;
           white-space: nowrap;
-
           &:hover {
             background-color: #f9f9f9;
             color: ${({ theme }) => theme.color?.primary || "#ff5800"};
