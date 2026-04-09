@@ -1,14 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+// src/hooks/useBooks.ts
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/api/http";
-import { type Book } from "@/models/book.model";
 
 export const useBooks = () => {
-  // useQuery를 사용하면 로딩, 에러, 데이터를 한 번에 관리할 수 있습니다.
-  return useQuery<Book[]>({
+  return useInfiniteQuery({
     queryKey: ["books"],
-    queryFn: async () => {
-      const response = await httpClient.get("/books");
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await httpClient.get(`/books?page=${pageParam}`);
       return response.data;
     },
+    getNextPageParam: (lastPage) => {
+      const isLast = lastPage.pagination.currentPage >= 5; // 총 5페이지라고 가정
+      return isLast ? undefined : lastPage.pagination.currentPage + 1;
+    },
+    initialPageParam: 1,
   });
 };
